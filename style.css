@@ -48,6 +48,32 @@ body{
   filter: saturate(1.08);
 }
 
+.time-card{
+  text-align:center;
+}
+
+.time-display{
+  font-size:42px;
+  font-weight:900;
+  color: var(--sun);
+  letter-spacing:1px;
+  margin:10px 0 8px;
+  text-shadow:
+    0 0 10px rgba(255,201,74,.25),
+    0 0 22px rgba(255,201,74,.18);
+}
+
+.time-desc{
+  font-size:15px;
+  line-height:1.55;
+  color: var(--muted);
+  margin: 6px 0 2px;
+}
+
+.time-desc strong{
+  color: var(--sun);
+}
+
 .banner{
   width:min(520px, 92vw);
   height:auto;
