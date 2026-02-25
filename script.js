@@ -18,29 +18,29 @@ if (copyBtn && caEl) {
 }
 
 /* ===============================
-   MARKET CAP / PROGRESS BAR
-   (manual number for now)
+   NEW JERSEY (ET) LIVE CLOCK
 ================================ */
-const marketCapUSD = 12500; // <-- CHANGE THIS NUMBER
-const target = 100_000_000;
+const njTimeEl = document.getElementById("njTime");
 
-const mcapEl = document.getElementById("mcap");
-const pctEl = document.getElementById("pct");
-const fillEl = document.getElementById("barFill");
+function updateNJTime() {
+  if (!njTimeEl) return;
 
-function formatUSD(n) {
-  if (n >= 1e9) return `$${(n / 1e9).toFixed(2)}B`;
-  if (n >= 1e6) return `$${(n / 1e6).toFixed(2)}M`;
-  if (n >= 1e3) return `$${(n / 1e3).toFixed(1)}K`;
-  return `$${n.toFixed(0)}`;
+  const now = new Date();
+
+  const time = now.toLocaleTimeString("en-US", {
+    timeZone: "America/New_York",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+  });
+
+  njTimeEl.textContent = time;
 }
 
-if (mcapEl && pctEl && fillEl) {
-  const pct = Math.max(0, Math.min(100, (marketCapUSD / target) * 100));
-  mcapEl.textContent = formatUSD(marketCapUSD);
-  pctEl.textContent = `${pct.toFixed(4)}%`;
-  fillEl.style.width = `${pct}%`;
-}
+// initial + live update
+updateNJTime();
+setInterval(updateNJTime, 1000);
 
 /* ===============================
    FLOATING SUNS BACKGROUND
