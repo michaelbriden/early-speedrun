@@ -262,6 +262,14 @@ body{
   animation: floatUp var(--dur, 12s) linear forwards;
 }
 
+.sun-img{
+  width: 100%;
+  height: auto;
+  display:block;
+  pointer-events:none;
+  filter: drop-shadow(0 0 16px rgba(255,201,74,.35));
+}
+
 @keyframes floatUp{
   0%{
     transform: translateX(0) translateY(0);
