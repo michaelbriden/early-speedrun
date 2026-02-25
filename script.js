@@ -56,7 +56,7 @@ function spawnSun() {
 
   const sun = document.createElement("div");
   sun.className = "sun";
-  sun.textContent = "☀️"; // replace with image if you want
+sun.innerHTML = `<img src="sun.png" class="sun-img" />`; // replace with image if you want
 
   const x = rand(0, window.innerWidth);
   const size = rand(18, 46);
