@@ -1,3 +1,6 @@
+// ====== CONFIG (set this on launch) ======
+const TOKEN_CA = ""; // <-- paste mint address here when you launch
+
 /* ===============================
    COPY CONTRACT ADDRESS
 ================================ */
@@ -161,7 +164,10 @@ function startMarketTracker(ca) {
   setInterval(() => tickMarket(ca), 5000);
 }
 
-// ✅ Set CA via URL param so you never redeploy:
-// Example: https://yourdomain.com/?ca=PASTE_MINT_HERE
-const caFromUrl = new URLSearchParams(window.location.search).get("ca");
-if (caFromUrl) startMarketTracker(caFromUrl);
+if (TOKEN_CA && TOKEN_CA.length > 20) {
+  startMarketTracker(TOKEN_CA);
+} else {
+  // show placeholder so people know it’s not live yet
+  setMarketUI(null);
+  if (caEl) caEl.textContent = "TBA";
+}
