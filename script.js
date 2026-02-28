@@ -90,3 +90,78 @@ setInterval(() => {
 for (let i = 0; i < 6; i++) {
   setTimeout(spawnSun, i * 250);
 }
+
+/* ===============================
+   MARKET CAP TRACKER (pump.fun / Solana)
+   Uses DexScreener (free, auto-indexed once trading)
+================================ */
+
+const GOAL = 100_000_000; // matches your "/ $100M"
+const PUMP_SUPPLY_FALLBACK = 1_000_000_000;
+
+function fmtAbbrev(n) {
+  if (n == null || Number.isNaN(n)) return "—";
+  const abs = Math.abs(n);
+  if (abs >= 1e9) return "$" + (n / 1e9).toFixed(2).replace(/\.00$/, "") + "B";
+  if (abs >= 1e6) return "$" + (n / 1e6).toFixed(2).replace(/\.00$/, "") + "M";
+  if (abs >= 1e3) return "$" + (n / 1e3).toFixed(1).replace(/\.0$/, "") + "K";
+  return "$" + Math.round(n).toLocaleString();
+}
+
+async function fetchDexScreenerSol(ca) {
+  const url = `https://api.dexscreener.com/latest/dex/tokens/${ca}`;
+  const r = await fetch(url);
+  const data = await r.json();
+
+  const pairs = data?.pairs || [];
+  if (!pairs.length) return { marketcap: null };
+
+  const best =
+    pairs
+      .filter(p => p.chainId === "solana")
+      .sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0))[0] || pairs[0];
+
+  const priceUsd = best.priceUsd != null ? Number(best.priceUsd) : null;
+  let marketcap = best.marketCap ?? best.fdv ?? null;
+
+  // fallback if only price is available
+  if (marketcap == null && priceUsd != null) marketcap = priceUsd * PUMP_SUPPLY_FALLBACK;
+
+  return { marketcap };
+}
+
+function setMarketUI(marketcap) {
+  const mcapEl = document.getElementById("mcap");
+  const barFill = document.getElementById("barFill");
+  const pctEl = document.getElementById("pct");
+
+  if (mcapEl) mcapEl.textContent = fmtAbbrev(marketcap);
+
+  const pct = marketcap != null ? (marketcap / GOAL) * 100 : 0;
+  const pctClamped = Math.max(0, Math.min(100, pct));
+
+  if (barFill) barFill.style.width = `${pctClamped}%`;
+  if (pctEl) pctEl.textContent = `${pctClamped.toFixed(4)}%`;
+}
+
+async function tickMarket(ca) {
+  try {
+    const { marketcap } = await fetchDexScreenerSol(ca);
+    setMarketUI(marketcap);
+  } catch (e) {
+    console.warn("Marketcap fetch failed:", e);
+  }
+}
+
+function startMarketTracker(ca) {
+  // Put CA into the contract box so copy works
+  if (caEl) caEl.textContent = ca;
+
+  tickMarket(ca);
+  setInterval(() => tickMarket(ca), 5000);
+}
+
+// ✅ Set CA via URL param so you never redeploy:
+// Example: https://yourdomain.com/?ca=PASTE_MINT_HERE
+const caFromUrl = new URLSearchParams(window.location.search).get("ca");
+if (caFromUrl) startMarketTracker(caFromUrl);
