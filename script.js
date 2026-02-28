@@ -1,5 +1,5 @@
 // ====== CONFIG (set this on launch) ======
-const TOKEN_CA = ""; // <-- paste mint address here when you launch
+const TOKEN_CA = "FrhioeeWr84kspR2zfEZ4hg6SAG7GSp9TTc4KEdLCWFr"; // <-- paste mint address here when you launch
 
 /* ===============================
    COPY CONTRACT ADDRESS
