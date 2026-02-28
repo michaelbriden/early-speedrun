@@ -99,7 +99,7 @@ for (let i = 0; i < 6; i++) {
    Uses DexScreener (free, auto-indexed once trading)
 ================================ */
 
-const GOAL = 100_000_000; // matches your "/ $100M"
+const GOAL = 2_000_000; // matches your "/ $2M"
 const PUMP_SUPPLY_FALLBACK = 1_000_000_000;
 
 function fmtAbbrev(n) {
