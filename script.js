@@ -161,7 +161,7 @@ function startMarketTracker(ca) {
   if (caEl) caEl.textContent = ca;
 
   tickMarket(ca);
-  setInterval(() => tickMarket(ca), 1000);
+  setInterval(() => tickMarket(ca), 100);
 }
 
 if (TOKEN_CA && TOKEN_CA.length > 20) {
